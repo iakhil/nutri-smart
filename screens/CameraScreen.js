@@ -4,6 +4,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
+import { analyzeFoodLabel } from '../services/geminiService';
 
 export default function CameraScreen() {
   const navigation = useNavigation();
@@ -67,34 +68,26 @@ export default function CameraScreen() {
 
     setIsProcessing(true);
     
-    // Simulate API call - in production, this would call your backend/ML service
-    // The userProfile would be sent along with the image for personalized analysis
-    setTimeout(() => {
+    try {
+      // Call Gemini API to analyze the food label
+      const analysis = await analyzeFoodLabel(imageUri, userProfile);
+      
       setIsProcessing(false);
-      // Navigate to results with mock data
+      
+      // Navigate to results with real analysis data
       navigation.navigate('Results', {
         imageUri,
-        analysis: {
-          productName: 'Sample Product',
-          summary: 'This product contains various ingredients...',
-          pros: [
-            'Good source of protein',
-            'Low in saturated fat',
-            'Contains essential vitamins',
-          ],
-          cons: [
-            'High in sodium',
-            'Contains added sugars',
-            'May contain allergens',
-          ],
-          scores: {
-            health: 7,
-            fulfilling: 6,
-            taste: 8,
-          },
-        },
+        analysis,
       });
-    }, 2000);
+    } catch (error) {
+      setIsProcessing(false);
+      console.error('Analysis error:', error);
+      Alert.alert(
+        'Analysis Failed',
+        error.message || 'Failed to analyze food label. Please make sure your API key is set correctly and try again.',
+        [{ text: 'OK' }]
+      );
+    }
   };
 
   if (imageUri) {
