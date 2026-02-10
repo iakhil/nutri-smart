@@ -15,7 +15,7 @@ export default function ResultsScreen({ route }) {
         <View style={styles.scoreBarContainer}>
           <View style={styles.scoreBarBackground}>
             <LinearGradient
-              colors={['#667eea', '#764ba2']}
+              colors={['#000000', '#2a2a2a']}
               style={[styles.scoreBarFill, { width: `${score * 10}%` }]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   scoreValue: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#667eea',
+    color: '#000000',
   },
   scoreBarContainer: {
     height: 8,

@@ -8,7 +8,7 @@ export default function HomeScreen() {
 
   return (
     <LinearGradient
-      colors={['#667eea', '#764ba2']}
+      colors={['#000000', '#1a1a1a']}
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.content}>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   button: {
-    backgroundColor: '#667eea',
+    backgroundColor: '#000000',
     paddingVertical: 14,
     paddingHorizontal: 32,
     borderRadius: 12,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonTextSecondary: {
-    color: '#667eea',
+    color: '#000000',
     fontSize: 16,
     fontWeight: '600',
   },
