@@ -123,14 +123,13 @@ export default function CameraScreen() {
         ref={cameraRef}
         style={styles.camera}
         facing="back"
-      >
-        <View style={styles.overlay}>
-          <View style={styles.frame} />
-          <Text style={styles.instruction}>
-            Position the food label within the frame
-          </Text>
-        </View>
-      </CameraView>
+      />
+      <View style={styles.overlay}>
+        <View style={styles.frame} />
+        <Text style={styles.instruction}>
+          Position the food label within the frame
+        </Text>
+      </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.buttonSecondary} onPress={pickImage}>
           <Text style={styles.buttonTextSecondary}>Choose from Gallery</Text>
@@ -160,10 +159,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   overlay: {
-    flex: 1,
-    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   frame: {
     width: '80%',

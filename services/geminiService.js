@@ -1,5 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
-import * as FileSystem from 'expo-file-system';
+import { File } from 'expo-file-system';
 import { GEMINI_API_KEY } from '../config';
 
 if (!GEMINI_API_KEY) {
@@ -31,9 +31,9 @@ const getImageMimeType = (uri) => {
  */
 const imageToBase64 = async (uri) => {
   try {
-    const base64 = await FileSystem.readAsStringAsync(uri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
+    // Use the new File API from expo-file-system
+    const file = new File(uri);
+    const base64 = await file.base64();
     return base64;
   } catch (error) {
     console.error('Error converting image to base64:', error);

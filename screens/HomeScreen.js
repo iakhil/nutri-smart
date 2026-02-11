@@ -1,10 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../context/AuthContext';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            await logout();
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <LinearGradient
@@ -13,6 +32,14 @@ export default function HomeScreen() {
     >
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
+          <View style={styles.headerTop}>
+            <View style={styles.userInfo}>
+              <Text style={styles.greeting}>Hello, {user?.name || 'User'}</Text>
+            </View>
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+              <Text style={styles.logoutText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
           <Text style={styles.title}>NutriSmart</Text>
           <Text style={styles.subtitle}>Your Smart Grocery Assistant</Text>
         </View>
@@ -58,6 +85,35 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 40,
+    width: '100%',
+  },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+    paddingHorizontal: 4,
+  },
+  userInfo: {
+    flex: 1,
+  },
+  greeting: {
+    fontSize: 16,
+    color: '#fff',
+    opacity: 0.8,
+  },
+  logoutButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#fff',
+  },
+  logoutText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   title: {
     fontSize: 42,
