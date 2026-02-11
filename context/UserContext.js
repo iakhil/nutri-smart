@@ -1,20 +1,83 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { profileService } from '../services/profileService';
+import { useAuth } from './AuthContext';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  const { isAuthenticated } = useAuth();
   const [userProfile, setUserProfile] = useState({
     allergies: [],
     goals: null, // 'losing_weight', 'gaining_weight', 'building_body', 'maintaining'
     dietaryRestrictions: [], // 'vegetarian', 'vegan', 'keto', 'paleo', 'gluten_free', etc.
   });
+  const [loading, setLoading] = useState(false);
 
-  const updateProfile = (updates) => {
+  // Load profile from backend when user is authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadProfile();
+    } else {
+      // Reset profile when logged out
+      setUserProfile({
+        allergies: [],
+        goals: null,
+        dietaryRestrictions: [],
+      });
+    }
+  }, [isAuthenticated]);
+
+  const loadProfile = async () => {
+    setLoading(true);
+    try {
+      const result = await profileService.getProfile();
+      if (result.success) {
+        setUserProfile({
+          allergies: result.profile.allergies || [],
+          goals: result.profile.goals || null,
+          dietaryRestrictions: result.profile.dietary_restrictions || [],
+        });
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateProfile = async (updates) => {
+    // Optimistically update local state
     setUserProfile((prev) => ({ ...prev, ...updates }));
+
+    // Sync with backend
+    try {
+      const result = await profileService.updateProfile({
+        allergies: updates.allergies !== undefined ? updates.allergies : userProfile.allergies,
+        goals: updates.goals !== undefined ? updates.goals : userProfile.goals,
+        dietaryRestrictions: updates.dietaryRestrictions !== undefined 
+          ? updates.dietaryRestrictions 
+          : userProfile.dietaryRestrictions,
+      });
+
+      if (result.success) {
+        setUserProfile({
+          allergies: result.profile.allergies || [],
+          goals: result.profile.goals || null,
+          dietaryRestrictions: result.profile.dietary_restrictions || [],
+        });
+      } else {
+        // Revert on error
+        loadProfile();
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      // Revert on error
+      loadProfile();
+    }
   };
 
   return (
-    <UserContext.Provider value={{ userProfile, updateProfile }}>
+    <UserContext.Provider value={{ userProfile, updateProfile, loading }}>
       {children}
     </UserContext.Provider>
   );
