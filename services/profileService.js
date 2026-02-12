@@ -26,7 +26,8 @@ export const profileService = {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch profile');
+        // FastAPI returns errors in "detail" field
+        throw new Error(data.detail || data.error || 'Failed to fetch profile');
       }
 
       return {
@@ -68,7 +69,8 @@ export const profileService = {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to update profile');
+        // FastAPI returns errors in "detail" field
+        throw new Error(data.detail || data.error || 'Failed to update profile');
       }
 
       return {

@@ -20,7 +20,8 @@ export const authService = {
       const data = await response.json();
 
       if (!response.ok) {
-        return { success: false, error: data.error || 'Login failed' };
+        // FastAPI returns errors in "detail" field
+        return { success: false, error: data.detail || data.error || 'Login failed' };
       }
 
       return {
@@ -53,7 +54,8 @@ export const authService = {
       const data = await response.json();
 
       if (!response.ok) {
-        return { success: false, error: data.error || 'Signup failed' };
+        // FastAPI returns errors in "detail" field
+        return { success: false, error: data.detail || data.error || 'Signup failed' };
       }
 
       return {
