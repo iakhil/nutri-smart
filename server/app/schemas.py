@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
 from datetime import datetime
 
@@ -42,7 +42,10 @@ class AuthResponse(BaseModel):
 class ProfileUpdate(BaseModel):
     allergies: Optional[List[str]] = None
     goals: Optional[str] = None
-    dietary_restrictions: Optional[List[str]] = None
+    dietary_restrictions: Optional[List[str]] = Field(None, alias="dietaryRestrictions")
+    
+    class Config:
+        populate_by_name = True  # Allow both field name and alias
 
 
 class ProfileResponse(BaseModel):
