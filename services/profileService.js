@@ -66,12 +66,23 @@ export const profileService = {
         }),
       });
 
-      const data = await response.json();
-
+      // Check if response is OK before parsing
       if (!response.ok) {
-        // FastAPI returns errors in "detail" field
-        throw new Error(data.detail || data.error || 'Failed to update profile');
+        // Try to parse error response
+        let errorMessage = 'Failed to update profile';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorData.error || errorMessage;
+        } catch (e) {
+          // If not JSON, get text
+          const text = await response.text();
+          console.error('Non-JSON error response:', text);
+          errorMessage = text.substring(0, 200) || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
+
+      const data = await response.json();
 
       return {
         success: true,

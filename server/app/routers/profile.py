@@ -44,34 +44,42 @@ async def update_profile(
     db: Session = Depends(get_db)
 ):
     """Update user profile"""
-    profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
-    
-    if not profile:
-        # Create new profile
-        profile = UserProfile(
-            user_id=current_user.id,
-            allergies=profile_data.allergies or [],
-            goals=profile_data.goals,
-            dietary_restrictions=profile_data.dietary_restrictions or []
+    try:
+        profile = db.query(UserProfile).filter(UserProfile.user_id == current_user.id).first()
+        
+        if not profile:
+            # Create new profile
+            profile = UserProfile(
+                user_id=current_user.id,
+                allergies=profile_data.allergies or [],
+                goals=profile_data.goals,
+                dietary_restrictions=profile_data.dietary_restrictions or []
+            )
+            db.add(profile)
+        else:
+            # Update existing profile
+            if profile_data.allergies is not None:
+                profile.allergies = profile_data.allergies
+            if profile_data.goals is not None:
+                profile.goals = profile_data.goals
+            if profile_data.dietary_restrictions is not None:
+                profile.dietary_restrictions = profile_data.dietary_restrictions
+        
+        db.commit()
+        db.refresh(profile)
+        
+        return ProfileUpdateResponse(
+            success=True,
+            profile=ProfileResponse(
+                allergies=profile.allergies or [],
+                goals=profile.goals,
+                dietary_restrictions=profile.dietary_restrictions or []
+            )
         )
-        db.add(profile)
-    else:
-        # Update existing profile
-        if profile_data.allergies is not None:
-            profile.allergies = profile_data.allergies
-        if profile_data.goals is not None:
-            profile.goals = profile_data.goals
-        if profile_data.dietary_restrictions is not None:
-            profile.dietary_restrictions = profile_data.dietary_restrictions
-    
-    db.commit()
-    db.refresh(profile)
-    
-    return ProfileUpdateResponse(
-        success=True,
-        profile=ProfileResponse(
-            allergies=profile.allergies or [],
-            goals=profile.goals,
-            dietary_restrictions=profile.dietary_restrictions or []
+    except Exception as e:
+        db.rollback()
+        print(f"Error updating profile: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update profile: {str(e)}"
         )
-    )
