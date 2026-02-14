@@ -40,7 +40,7 @@ export default function HomeScreen() {
               <Text style={styles.logoutText}>Logout</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.title}>NutriSmart</Text>
+          <Text style={styles.title}>Aisle Scan</Text>
           <Text style={styles.subtitle}>Your Smart Grocery Assistant</Text>
         </View>
 

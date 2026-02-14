@@ -48,7 +48,7 @@ function AppNavigator() {
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ title: 'NutriSmart', headerShown: false }}
+            options={{ title: 'Aisle Scan', headerShown: false }}
       />
       <Stack.Screen
         name="Profile"

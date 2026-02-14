@@ -46,11 +46,15 @@ export default function ProfileScreen() {
 
   const toggleDietaryRestriction = (restriction) => {
     const restrictions = userProfile.dietaryRestrictions || [];
-    if (restrictions.includes(restriction)) {
-      updateProfile({ dietaryRestrictions: restrictions.filter(r => r !== restriction) });
-    } else {
-      updateProfile({ dietaryRestrictions: [...restrictions, restriction] });
-    }
+    const newRestrictions = restrictions.includes(restriction)
+      ? restrictions.filter(r => r !== restriction)
+      : [...restrictions, restriction];
+    
+    console.log('Toggling restriction:', restriction);
+    console.log('Current restrictions:', restrictions);
+    console.log('New restrictions:', newRestrictions);
+    
+    updateProfile({ dietaryRestrictions: newRestrictions });
   };
 
   return (
