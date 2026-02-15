@@ -1,5 +1,5 @@
 {
-  "name": "nutri-smart",
+  "name": "aisle-scan",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -15,9 +15,11 @@
     "@react-navigation/native-stack": "^7.12.0",
     "expo": "~54.0.33",
     "expo-camera": "^17.0.10",
+    "expo-crypto": "^15.0.8",
     "expo-file-system": "^19.0.21",
     "expo-image-picker": "^17.0.10",
     "expo-linear-gradient": "^15.0.8",
+    "expo-secure-store": "^15.0.8",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
     "react-native": "0.81.5",

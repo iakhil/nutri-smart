@@ -27,8 +27,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="NutriSmart API",
-    description="Backend API for NutriSmart mobile app",
+    title="Aisle Scan API",
+    description="Backend API for Aisle Scan mobile app",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -55,16 +55,16 @@ async def health_check():
         with engine.connect() as conn:
             return {
                 "status": "ok",
-                "message": "NutriSmart API is running",
+                "message": "Aisle Scan API is running",
                 "database": "connected"
             }
-    except Exception as e:
-        return {
-            "status": "ok",
-            "message": "NutriSmart API is running",
-            "database": "disconnected",
-            "error": str(e)
-        }
+        except Exception as e:
+            return {
+                "status": "ok",
+                "message": "Aisle Scan API is running",
+                "database": "disconnected",
+                "error": str(e)
+            }
 
 
 if __name__ == "__main__":

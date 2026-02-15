@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     # Database
     DB_HOST: str = "localhost"
     DB_PORT: int = 5432
-    DB_NAME: str = "nutri_smart"
+    DB_NAME: str = "aisle_scan"
     DB_USER: str = "postgres"
     DB_PASSWORD: str = ""
     

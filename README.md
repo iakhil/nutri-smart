@@ -1,9 +1,10 @@
-# NutriSmart - Smart Grocery Assistant
+# Aisle Scan - Smart Grocery Assistant
 
 A React Native + Expo app that helps users make informed grocery shopping decisions by analyzing food labels based on their personal health profile.
 
 ## Features
 
+- 🔐 **Authentication**: Secure login and signup with token-based authentication
 - 📸 **Food Label Scanning**: Take photos or select images of ingredient and nutrition labels
 - 👤 **Personalized Profile**: Set allergies, health goals, and dietary restrictions
 - 📊 **Smart Analysis**: Get detailed analysis with pros/cons and scores for health, fulfilling, and taste
@@ -16,52 +17,118 @@ A React Native + Expo app that helps users make informed grocery shopping decisi
 - Node.js (v14 or higher)
 - npm or yarn
 - Expo CLI (`npm install -g expo-cli`)
+- PostgreSQL (v12 or higher)
 - iOS Simulator (for Mac) or Android Studio (for Android development)
 - **Gemini API Key** - Get a free API key from [Google AI Studio](https://aistudio.google.com/apikey)
 
 ### Installation
 
-1. Install dependencies:
-```bash
-npm install
-```
+#### 1. Set Up Backend Server
 
-2. **Set up your Gemini API Key:**
+1. **Install PostgreSQL** (if not already installed):
+   - macOS: `brew install postgresql`
+   - Ubuntu: `sudo apt-get install postgresql`
+   - Windows: Download from [postgresql.org](https://www.postgresql.org/download/)
 
-   Option A: Using environment variable (Recommended)
-   - Create a `.env` file in the root directory
-   - Add: `EXPO_PUBLIC_GEMINI_API_KEY=your_api_key_here`
-   - Restart your Expo development server
+2. **Create Database**:
+   ```sql
+   CREATE DATABASE nutri_smart;
+   ```
 
-   Option B: Direct configuration (For testing only)
-   - Edit `config.js` and set your API key directly
-   - **Note:** Never commit API keys to version control!
+3. **Set Up Backend**:
+   ```bash
+   cd server
+   npm install
+   ```
 
-3. Start the development server:
-```bash
-npm start
-```
+4. **Configure Backend Environment**:
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `server/.env` with your database credentials:
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=nutri_smart
+   DB_USER=postgres
+   DB_PASSWORD=your_password_here
+   JWT_SECRET=your_super_secret_jwt_key
+   PORT=3000
+   ```
 
-4. Run on your preferred platform:
-- iOS: Press `i` in the terminal or run `npm run ios`
-- Android: Press `a` in the terminal or run `npm run android`
-- Web: Press `w` in the terminal or run `npm run web`
+5. **Run Database Migrations**:
+   ```bash
+   npm run migrate
+   ```
+
+6. **Start Backend Server**:
+   ```bash
+   npm run dev
+   ```
+   The server will run on `http://localhost:3000`
+
+#### 2. Set Up Mobile App
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Configure Environment Variables**:
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env`:
+   ```env
+   EXPO_PUBLIC_GEMINI_API_KEY=your_api_key_here
+   EXPO_PUBLIC_API_URL=http://localhost:3000
+   ```
+   
+   **Important**: For mobile devices, replace `localhost` with your computer's IP address:
+   - Find your IP: `ifconfig | grep "inet "` (macOS/Linux) or `ipconfig` (Windows)
+   - Example: `EXPO_PUBLIC_API_URL=http://192.168.1.100:3000`
+
+3. **Start Expo Development Server**:
+   ```bash
+   npm start
+   ```
+
+4. **Run on Your Preferred Platform**:
+   - iOS: Press `i` in the terminal or run `npm run ios`
+   - Android: Press `a` in the terminal or run `npm run android`
+   - Web: Press `w` in the terminal or run `npm run web`
 
 ## Project Structure
 
 ```
-nutri-smart/
-├── App.js                 # Main app component with navigation
-├── config.js              # API key configuration
+aisle-scan/
+├── App.js                 # Main app component with navigation and auth flow
+├── config.js              # API key and backend URL configuration
 ├── context/
+│   ├── AuthContext.js     # Authentication state management
 │   └── UserContext.js     # User profile state management
 ├── services/
+│   ├── authService.js     # Authentication service (connects to backend API)
+│   ├── profileService.js  # Profile service (connects to backend API)
 │   └── geminiService.js   # Gemini API integration for food analysis
 ├── screens/
+│   ├── LoginScreen.js     # User login screen
+│   ├── SignupScreen.js    # User signup screen
 │   ├── HomeScreen.js      # Welcome/home screen
 │   ├── ProfileScreen.js   # User profile management
 │   ├── CameraScreen.js    # Camera/image picker for food labels
 │   └── ResultsScreen.js   # Display analysis results
+├── server/                # Backend server
+│   ├── server.js          # Express server entry point
+│   ├── config/
+│   │   └── database.js    # PostgreSQL connection
+│   ├── models/
+│   │   └── User.js        # User model
+│   ├── routes/
+│   │   ├── auth.js        # Authentication routes
+│   │   └── profile.js     # Profile routes
+│   └── scripts/
+│       └── migrate.js     # Database migration script
 └── assets/                # Images and icons
 ```
 
@@ -95,6 +162,33 @@ The app uses the `@google/genai` SDK to interact with Gemini API. The `geminiSer
 - [ ] Social sharing of analysis results
 - [ ] Offline mode with cached analysis
 
+## Backend Architecture
+
+The app uses a **PostgreSQL database** with a **Node.js/Express backend**:
+
+### Database Schema
+
+- **users**: Stores user accounts (email, password hash, name)
+- **user_profiles**: Stores user preferences (allergies, goals, dietary restrictions)
+- **food_scans**: Stores food scan history (for future features)
+
+### API Endpoints
+
+- `POST /api/auth/signup` - Create new user account
+- `POST /api/auth/login` - Authenticate user
+- `GET /api/auth/verify` - Verify JWT token
+- `GET /api/profile` - Get user profile (authenticated)
+- `PUT /api/profile` - Update user profile (authenticated)
+
+### Authentication
+
+- **JWT Tokens**: Secure token-based authentication
+- **Password Hashing**: bcrypt for secure password storage
+- **Protected Routes**: API endpoints require authentication
+- **Session Persistence**: Tokens stored securely on device
+
+See `server/README.md` for detailed backend setup instructions.
+
 ## Technologies Used
 
 - React Native
@@ -104,6 +198,8 @@ The app uses the `@google/genai` SDK to interact with Gemini API. The `geminiSer
 - Expo Image Picker
 - Expo Linear Gradient
 - Expo File System
+- Expo SecureStore (for secure token storage)
+- Expo Crypto (for password hashing)
 - **Google Gemini 2.5 Flash API** (`@google/genai`)
 
 ## Troubleshooting

@@ -59,6 +59,7 @@ export default function SignupScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
+          <Text style={styles.appName}>AISLE SCAN</Text>
           <Text style={styles.title}>Create Account</Text>
           <Text style={styles.subtitle}>Sign up to get started</Text>
 
@@ -154,6 +155,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: 'center',
+  },
+  appName: {
+    fontSize: 36,
+    fontWeight: '800',
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+    letterSpacing: 4,
+    color: '#fff',
+    marginBottom: 20,
+    textAlign: 'center',
+    textTransform: 'uppercase',
   },
   title: {
     fontSize: 32,

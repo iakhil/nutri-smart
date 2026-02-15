@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
@@ -40,7 +40,7 @@ export default function HomeScreen() {
               <Text style={styles.logoutText}>Logout</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.title}>Aisle Scan</Text>
+          <Text style={styles.title}>AISLE SCAN</Text>
           <Text style={styles.subtitle}>Your Smart Grocery Assistant</Text>
         </View>
 
@@ -117,7 +117,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 42,
-    fontWeight: 'bold',
+    fontWeight: '800',
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+    letterSpacing: 4,
     color: '#fff',
     marginBottom: 10,
   },

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "nutri-smart",
-    "slug": "nutri-smart",
+    "name": "Aisle Scan",
+    "slug": "aisle-scan",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

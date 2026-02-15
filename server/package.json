@@ -1,7 +1,7 @@
 {
-  "name": "nutri-smart-server",
+  "name": "aisle-scan-server",
   "version": "1.0.0",
-  "description": "Backend server for NutriSmart app",
+  "description": "Backend server for Aisle Scan app",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -1,6 +1,6 @@
-# NutriSmart Backend Server (FastAPI)
+# Aisle Scan Backend Server (FastAPI)
 
-Backend API server for the NutriSmart mobile app, built with FastAPI, SQLAlchemy, and PostgreSQL.
+Backend API server for the Aisle Scan mobile app, built with FastAPI, SQLAlchemy, and PostgreSQL.
 
 ## Features
 
@@ -34,11 +34,24 @@ pip install -r requirements.txt
 
 ### 2. Configure Database
 
+**Option A: Using the setup script (Recommended)**
+
+Run the setup script which will create the database automatically:
+
+```bash
+chmod +x setup_db.sh
+./setup_db.sh
+```
+
+**Option B: Manual setup**
+
 Create a PostgreSQL database:
 
 ```sql
-CREATE DATABASE nutri_smart;
+CREATE DATABASE aisle_scan;
 ```
+
+**Note for macOS users**: With Homebrew PostgreSQL, your default user is your macOS username (no password needed). On Linux, it's usually `postgres`.
 
 ### 3. Configure Environment Variables
 
@@ -49,12 +62,24 @@ cp .env.example .env
 ```
 
 Edit `.env`:
+- **macOS (Homebrew)**: Use your macOS username, leave password empty
+  ```env
+  DB_USER=your_macos_username
+  DB_PASSWORD=
+  ```
+- **Linux**: Usually use `postgres` user with password
+  ```env
+  DB_USER=postgres
+  DB_PASSWORD=your_password_here
+  ```
+
+Complete `.env` example:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=nutri_smart
-DB_USER=postgres
-DB_PASSWORD=your_password_here
+DB_NAME=aisle_scan
+DB_USER=akhilivaturi  # Your PostgreSQL username
+DB_PASSWORD=  # Leave empty for local peer authentication
 JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
 PORT=3000
 ```
