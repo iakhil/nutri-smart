@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Platform, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
@@ -40,7 +40,13 @@ export default function HomeScreen() {
               <Text style={styles.logoutText}>Logout</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.title}>AISLE SCAN</Text>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../assets/aisle_scan_logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
           <Text style={styles.subtitle}>Your Smart Grocery Assistant</Text>
         </View>
 
@@ -115,13 +121,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  title: {
-    fontSize: 42,
-    fontWeight: '800',
-    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
-    letterSpacing: 4,
-    color: '#fff',
-    marginBottom: 10,
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  logo: {
+    width: 100,
+    height: 100,
   },
   subtitle: {
     fontSize: 18,

@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Image,
 } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
@@ -59,7 +60,13 @@ export default function SignupScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
-          <Text style={styles.appName}>AISLE SCAN</Text>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../assets/aisle_scan_logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
           <Text style={styles.title}>Create Account</Text>
           <Text style={styles.subtitle}>Sign up to get started</Text>
 
@@ -156,15 +163,13 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
   },
-  appName: {
-    fontSize: 36,
-    fontWeight: '800',
-    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
-    letterSpacing: 4,
-    color: '#fff',
-    marginBottom: 20,
-    textAlign: 'center',
-    textTransform: 'uppercase',
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  logo: {
+    width: 120,
+    height: 120,
   },
   title: {
     fontSize: 32,
