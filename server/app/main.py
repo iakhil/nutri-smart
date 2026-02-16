@@ -58,13 +58,13 @@ async def health_check():
                 "message": "Aisle Scan API is running",
                 "database": "connected"
             }
-        except Exception as e:
-            return {
-                "status": "ok",
-                "message": "Aisle Scan API is running",
-                "database": "disconnected",
-                "error": str(e)
-            }
+    except Exception as e:
+        return {
+            "status": "ok",
+            "message": "Aisle Scan API is running",
+            "database": "disconnected",
+            "error": str(e)
+        }
 
 
 if __name__ == "__main__":
